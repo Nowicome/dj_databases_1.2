@@ -8,7 +8,7 @@
   <div class="container">
   <div class="header">
     <h5>
-      <a href="{% url '' %}">Вернуться в каталог</a>
+      <a href="{% url 'books' %}">Вернуться в каталог</a>
     </h5>
   </div>
     <div class="row">
@@ -16,9 +16,16 @@
             <div class="book col-md-4">
                 <h2>{{ book.name }}</h2>>
                 <p>Автор: {{ book.author }}</p>>
-                <p>Дата публикации: {{ pub_date }}</p>
+                <p>Дата публикации: {{ book.pub_date }}</p>
             </div>
         {% endfor %}
+
+        {% if prev_book %}
+        <a class="button button-primary" href="{% url 'books' %}{{ prev_book }}">⟵</a>
+        {% endif %}
+        {% if next_book %}
+        <a class="button button-primary" href="{% url 'books' %}{{ next_book }}">⟶</a>
+        {% endif %}
     </div>
   </div>
 {% endblock %}

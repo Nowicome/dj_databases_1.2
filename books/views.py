@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from books.models import Book
-from datetime import datetime
 
 
 def books_view(request):
@@ -22,11 +21,14 @@ def books_view(request):
 def date_books(request, pub_date):
     template = "books/date_book.html"
 
-    books = [{
-        "name": i.name,
-        "author": i.author,
-    } for i in Book.object.filter(pub_date=datetime.strptime(pub_date, "%Y-%m-%d").date())
-    ]
+    books_objects = Book.objects.filter(pub_date=pub_date)
+    prev_book = Book.objects.filter(pub_date__lt=pub_date).order_by("-pub_date").first()
+    next_book = Book.objects.filter(pub_date__gt=pub_date).order_by("pub_date").first()
 
-    context = {"books": books, "pub_date": pub_date, }
+    if prev_book:
+        prev_book = str(prev_book.pub_date)
+    if next_book:
+        next_book = str(next_book.pub_date)
+
+    context = {"books": books_objects, "prev_book": prev_book, "next_book": next_book, }
     return render(request, template, context)
